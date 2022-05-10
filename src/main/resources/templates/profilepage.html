@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <script th:src="@{assets/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{assets/css/main.css}">
+    <title>Title</title>
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-expand-sm" th:insert="menu.html"></nav>
+
+<div class="position-absolute">
+    <h1>Профиль пользователя</h1>
+
+
+    <p th:with="avatar=${#authentication.getPrincipal().user.avatar}" class="lead">
+        <img class="nav-img--avatar"
+             th:src="${avatar != null ? '/files/' + avatar.storageFileName : '/assets/images/homePageImages/default.png'}">
+
+    </p>
+
+
+    <p class="lead">
+        Имя: <strong sec:authentication="principal.user.firstName"></strong>
+    </p>
+    <p class="lead">
+        Фамилия: <strong sec:authentication="principal.user.lastName"></strong>
+    </p>
+    <p class="lead">
+        Логин: <strong sec:authentication="principal.user.username"></strong>
+    </p>
+    <p class="lead">
+        <a href="/editpage" class="btn btn-outline-dark btn-sm btn-block">Изменить профиль</a>
+    </p>
+
+<!--    <p class="lead">-->
+<!--        <a href="/course/myCourses" class="btn btn-outline-dark btn-sm btn-block">Посмотреть мои курсы</a>-->
+<!--    </p>-->
+
+    <form action="/logout" method="post">
+        <input type="submit" value="Выйти" class="btn btn-outline-dark btn-sm btn-block">
+    </form>
+</div>
+
+
+</body>
+</html>

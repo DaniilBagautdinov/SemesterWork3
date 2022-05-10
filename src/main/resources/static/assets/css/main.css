@@ -1,0 +1,23 @@
+.lgn {
+    position: absolute;
+    margin-top: 100px;
+    left: 600px;
+}
+
+.btn {
+    padding: 10px 105px;
+}
+
+.regbtn {
+    padding: 10px 55px;
+}
+
+.error {
+    color: red;
+}
+
+.nav-img--avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <script th:src="@{assets/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{assets/css/main.css}">
+    <title>Title</title>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-expand-sm" th:insert="menu.html"></nav>
+
+
+<form method="post" action="/login" id="loginForm">
+    <div class="lgn">
+        <h1>Авторизация</h1>
+        <p class="lead">
+            <label>
+                <input type="text" name="username" placeholder="Логин" id="username">
+            </label>
+        </p>
+        <p class="lead">
+            <label>
+                <input type="password" name="password" placeholder="Пароль" id="password">
+            </label>
+        </p>
+        <p class="lead">
+            <button
+                    type="submit" class="btn btn-outline-dark btn-sm">Войти
+            </button>
+        </p>
+        <p class="lead">
+            <a
+                    href="https://oauth.vk.com/authorize?client_id=8134165&redirect_uri=http://localhost/oauth2/callback&scope=4194304&display=page"
+                    class="btn btn-outline-dark btn-sm">Войти через ВК
+            </a>
+        </p>
+        <p class="lead">
+            <strong style="color:red; display: none" class="wrongUsernameOrPassword">Неверный логин или пароль</strong>
+        </p>
+
+        <p class="lead">
+            <a href="/registration">Зарегистрироваться</a>
+        </p>
+
+
+    </div>
+</form>
+
+
+<script>
+    $('#loginForm').submit(() => {
+
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: {
+                "username": $("#username").val(),
+                "password": $("#password").val()
+            },
+            success: () => {
+                $('.wrongUsernameOrPassword').hide()
+                location.href = '/'
+            },
+            error: () => {
+                $('.wrongUsernameOrPassword').show()
+            }
+
+        })
+
+        return false;
+    })
+</script>
+
+
+</body>
+</html>

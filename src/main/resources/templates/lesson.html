@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+    <title>Title</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-expand-sm" th:insert="menu.html"></nav>
+<a class="btn btn-dark" th:href="${'/course/' + lesson.getCourse().getId()}">Назад</a>
+
+<div class="row">
+    <div class="col text-center">
+        <h1 th:text="${lesson.getTitle()}"></h1>
+        <p th:text="${lesson.getDescription()}"></p>
+
+        <video width="400" height="300" controls="controls">
+            <source th:src="${'/files/'+ lesson.getVideo().getStorageFileName()}"
+                    type='video/ogg; codecs="theora, vorbis"'>
+        </video>
+
+        <h1>Домашнее задание</h1>
+        <h3 th:if="${lesson.getTask() != null}" th:text="${'Задание: ' + lesson.getTask().getTitle()}"></h3>
+        <p th:if="${lesson.getTask() != null}" th:text="${'Описание: ' + lesson.getTask().getDescription()}"></p>
+        <p th:if="${lesson.getTask() != null}" th:text="${'Максимальный балл: ' + lesson.getTask().getMaxScore()}"></p>
+        <p th:if="${lesson.getTask() == null}">Домашнего задания нет</p>
+
+        <form th:if="${lesson.getTask() != null && !courseInfo.isCreator() && !homeworkInfo.isPassed() && !homeworkInfo.isChecked()}"
+              th:action="${'/lesson/' + lesson.getId()  +  '/passHomework'}" method="post"
+              enctype="multipart/form-data" id="passHomework">
+            <p class="lead">
+                <label>
+                    <input type="file" name="photo" id="photo">
+                </label>
+            </p>
+            <p class="lead">
+                <label>
+                    <textarea name="answer" id="answer"></textarea>
+                </label>
+            </p>
+            <input type="submit" class="btn btn-outline-dark btn-sm" value="Сдать домашнее задание">
+        </form>
+
+
+        <form th:if="${lesson.getTask() == null && courseInfo.isCreator()}"
+              th:action="${'/lesson/' + lesson.getId()  +  '/createTask'}" method="post"
+              enctype="multipart/form-data" id="createTask">
+            <p class="lead">
+
+                <label>
+                    <input type="text" name="title" placeholder="Название" id="title">
+                </label>
+            </p>
+
+            <p class="lead">
+
+                <label>
+                    <input type="text" name="description" placeholder="Описание" id="description">
+                </label>
+            </p>
+
+            <p class="lead">
+
+                <label>
+                    <input type="number" name="maxScore" placeholder="Максимальный балл" id="maxScore">
+                </label>
+            </p>
+
+            <input type="submit" class="btn btn-outline-dark btn-sm" value="Добавить домашнее задание">
+
+        </form>
+
+        <p th:if="${lesson.getTask() != null && courseInfo.isCreator()}"
+           th:text="${'Выпонили ' + lesson.getHomeworks().size() + ' из ' + courseInfo.getStudentsCount()}"></p>
+        <p th:if="${lesson.getTask() != null && !courseInfo.isCreator() && homeworkInfo.isChecked()}"
+           th:text="'Ваши баллы: ' + ${homeworkInfo.getScore()}"></p>
+    </div>
+</div>
+
+
+<ul class="list-group" th:if="${lesson.getHomeworks().size() > 0 && courseInfo.isCreator()}">
+    <li class="list-group-item d-flex justify-content-between align-items-center"
+        th:each="homework : ${lesson.getHomeworks()}">
+        <a style="display: block" th:href="${'/homework/' + homework.id}"
+           th:text="${homework.student.lastName + ' ' + homework.student.firstName}"></a>
+        <span class="badge badge-primary badge-pill" th:text="${homework.score}"></span>
+    </li>
+</ul>
+
+<script>
+    $("#createTask").validate({
+        rules: {
+            title: {
+                required: true, minlength: 10, maxlength: 50,
+            },
+
+            description: {
+                required: true, minlength: 10, maxlength: 255,
+            },
+            maxScore: {
+                required: true, number: true, min: 10, max: 100,
+            },
+        }, messages: {
+            title: {
+                required: "Обязательно для ввода",
+                minlength: "Должно быть больше 10 символов",
+                maxlength: "Должно быть меньше 50 символов",
+            },
+
+            description: {
+                required: "Обязательно для ввода",
+                minlength: "Должно быть больше 10 символов",
+                maxlength: "Должно быть меньше 255 символов",
+            },
+            maxScore: {
+                required: "Обязательно для ввода",
+                min: "Должно быть больше 10",
+                max: "Должно быть меньше 100",
+                number: "Введите число"
+            }
+
+        },
+    });
+
+    $("#passHomework").validate({
+        rules: {
+            photo: {
+                required: true,
+            },
+
+            answer: {
+                required: true, minlength: 10, maxlength: 255,
+            }
+        }, messages: {
+            photo: {
+                required: "Обязательно для ввода"
+            },
+
+            answer: {
+                required: "Обязательно для ввода",
+                minlength: "Должно быть больше 10 символов",
+                maxlength: "Должно быть меньше 255 символов",
+            }
+
+        },
+    });
+</script>
+
+
+</body>
+</html>

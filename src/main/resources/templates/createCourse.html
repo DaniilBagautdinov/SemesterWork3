@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/main.css}">
+    <title>Title</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light navbar-expand-sm" th:insert="menu.html"></nav>
+
+    <div class="lgn">
+        <h1>Создать курс</h1>
+        <form action="/course/createCourse" method="post" id="createCourse">
+            <p class="lead">
+                <label>
+                    <input type="text" name="title" placeholder="Название" id="title">
+                </label>
+            </p>
+            <p class="lead">
+                <label>
+                    <input type="text" name="description" placeholder="Описание" id="description">
+                </label>
+            </p>
+            <input type="submit" class="btn btn-outline-dark btn-sm" value="Создать курс">
+        </form>
+    </div>
+
+<script>
+    $("#createCourse").validate({
+        rules: {
+            title: {
+                required: true, minlength: 10, maxlength: 50,
+            },
+
+            description: {
+                required: true, minlength: 10, maxlength: 255,
+            },
+        }, messages: {
+            title: {
+                required: "Обязательно для ввода",
+                minlength: "Должно быть больше 10 символов",
+                maxlength: "Должно быть меньше 50 символов",
+            },
+
+            description: {
+                required: "Обязательно для ввода",
+                minlength: "Должно быть больше 10 символов",
+                maxlength: "Должно быть меньше 255 символов",
+            },
+
+        },
+    });
+</script>
+
+
+</body>
+</html>
