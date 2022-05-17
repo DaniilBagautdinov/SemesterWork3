@@ -38,13 +38,11 @@
         Логин: <strong sec:authentication="principal.user.username"></strong>
     </p>
     <p class="lead">
+        Дата регистрации: <strong sec:authentication="principal.user.registrationDate"></strong>
+    </p>
+    <p class="lead">
         <a href="/editpage" class="btn btn-outline-dark btn-sm btn-block">Изменить профиль</a>
     </p>
-
-<!--    <p class="lead">-->
-<!--        <a href="/course/myCourses" class="btn btn-outline-dark btn-sm btn-block">Посмотреть мои курсы</a>-->
-<!--    </p>-->
-
     <form action="/logout" method="post">
         <input type="submit" value="Выйти" class="btn btn-outline-dark btn-sm btn-block">
     </form>

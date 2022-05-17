@@ -29,6 +29,9 @@ public class User {
     @Column
     private String passwordHash;
 
+    @Column
+    private String registrationDate;
+
     @OneToOne
     private FileInfo avatar;
 

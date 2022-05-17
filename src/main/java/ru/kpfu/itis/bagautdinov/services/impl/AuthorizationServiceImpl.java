@@ -1,5 +1,6 @@
 package ru.kpfu.itis.bagautdinov.services.impl;
 
+import ru.kpfu.itis.bagautdinov.converters.DateConverter;
 import ru.kpfu.itis.bagautdinov.dto.SignUpDto;
 import ru.kpfu.itis.bagautdinov.models.User;
 import ru.kpfu.itis.bagautdinov.repositories.UserRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -16,7 +18,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final DateConverter dateConverter;
 
     @Override
     public void registration(SignUpDto signUpDto) {
@@ -28,6 +30,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     .lastName(signUpDto.getLastName())
                     .username(signUpDto.getUsername())
                     .passwordHash(passwordEncoder.encode(signUpDto.getPassword()))
+                    .registrationDate(dateConverter.convert(Calendar.getInstance().getTime()))
                     .build();
 
             userRepository.save(user);
@@ -48,12 +51,11 @@ public class AuthorizationServiceImpl implements AuthorizationService {
                     .firstName(signUpDto.getFirstName())
                     .lastName(signUpDto.getLastName())
                     .username(signUpDto.getUsername())
+                    .registrationDate(dateConverter.convert(Calendar.getInstance().getTime()))
                     .build();
 
             userRepository.save(user);
 
         }
-
-
     }
 }
