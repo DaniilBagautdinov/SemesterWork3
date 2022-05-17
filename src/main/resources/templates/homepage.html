@@ -26,7 +26,7 @@
 <div class="row">
     <div class="col m-auto text-center">
         <h1>Курсы</h1>
-        <p th:if="${courses.empty}">Урсов пока нет(</p>
+        <p th:if="${courses.empty}">Курсов пока нет(</p>
         <div th:unless="${courses.empty}" class="card w-auto" th:each="course: ${courses}">
             <h4 th:text="${course.title}"></h4>
             <div class="card-body">
