@@ -1,5 +1,7 @@
 package ru.kpfu.itis.bagautdinov.services.impl;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import ru.kpfu.itis.bagautdinov.dto.SignUpDto;
 import ru.kpfu.itis.bagautdinov.models.User;
 import ru.kpfu.itis.bagautdinov.repositories.UserRepository;
@@ -42,7 +44,7 @@ public class OAuthServiceImpl implements OAuthService {
                     .lastName(user.getLastName())
                     .username(user.getUsername())
                     .build());
-
+            ResponseEntity.status(HttpStatus.ACCEPTED).build();
             user = userRepository.findByUsername(user.getUsername()).orElseThrow();
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(new UserSecurity(user), null,

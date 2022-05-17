@@ -40,8 +40,6 @@ public class MainController {
 
     @GetMapping("/*")
     public void getOther(){
-
-        LOGGER.warn("Страница не найдена");
         throw new RuntimeException("Страница не найдена");
     }
 
@@ -79,7 +77,7 @@ public class MainController {
     public ModelAndView handleException(RuntimeException e) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("exception", e);
-
+        LOGGER.warn("Страница не найдена");
         modelAndView.setViewName("error");
         return modelAndView;
     }

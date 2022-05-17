@@ -35,6 +35,6 @@ public class User {
     @OneToOne
     private FileInfo avatar;
 
-    @ManyToMany(mappedBy = "subscribers", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "subscribers", cascade = CascadeType.MERGE)
     private List<Course> courses;
 }

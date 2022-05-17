@@ -28,7 +28,7 @@ public class Course {
     @OneToOne
     private User creator;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE)
     @JoinColumn(name = "subscribers_id")
     private List<User> subscribers;
 

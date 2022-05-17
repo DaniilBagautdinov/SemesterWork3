@@ -1,5 +1,8 @@
 package ru.kpfu.itis.bagautdinov.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.kpfu.itis.bagautdinov.controllers.CourseController;
 import ru.kpfu.itis.bagautdinov.dto.DtoMapper;
 import ru.kpfu.itis.bagautdinov.dto.HomeworkDto;
 import ru.kpfu.itis.bagautdinov.repositories.LessonRepository;
@@ -11,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.kpfu.itis.bagautdinov.models.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -18,6 +22,7 @@ public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
     private final FilesService filesService;
     private final DtoMapper dtoMapper;
+    private final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
     @Override
     public void createTask(Long lessonId, Task task) {
@@ -43,9 +48,13 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Lesson getLesson(Long lessonId, User user) {
-        Lesson lesson = lessonRepository.findById(lessonId).orElseThrow();
-        if (lesson.getCourse().getSubscribers().stream().noneMatch(x->x.getId().equals(user.getId())) && !user.getId().equals(lesson.getCourse().getCreator().getId()))
+        Optional<Lesson> lesson = lessonRepository.findById(lessonId);
+        if (lesson.isEmpty()) {
+            LOGGER.warn("Такого урока не существует");
+            throw new RuntimeException("Такого урока не существует");
+        } else if (lesson.get().getCourse().getSubscribers().stream().noneMatch(x -> x.getId().equals(user.getId())) && !user.getId().equals(lesson.get().getCourse().getCreator().getId())) {
             throw new RuntimeException();
-        return lesson;
+        }
+        return lesson.get();
     }
 }
